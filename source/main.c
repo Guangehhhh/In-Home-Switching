@@ -368,7 +368,7 @@ int main(int argc, char **argv)
     tmp_buf = memalign(0x1000, 1280 * 720 * 4);
     memset(tmp_buf, 0xFF, 1280 * 720 * 4);
     pcvInitialize();
-    //pcvSetClockRate(PcvModule_Cpu, 1785000000);
+
     socketInitialize(&socketInitConf);
     romfsInit();
 
@@ -378,6 +378,14 @@ int main(int argc, char **argv)
         If you're doing printing in two threads at the same time it for some reason sometimes causes the thread to completely lock up
     */
     nxlinkStdio();
+
+    FILE* should_oc = fopen("/ihs_oc.txt", "r");
+    if(should_oc != NULL) {
+        printf("Overclocking!\n");
+        pcvSetClockRate(PcvModule_Cpu, 1785000000);
+        fclose(should_oc);
+    }
+
 
     gfxInitDefault();
 
